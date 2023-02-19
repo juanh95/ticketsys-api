@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //routers and routes
 
-app.use("/api/users", router);
+app.use("/api", router);
 
 app.use("/home", (req, res) => {
   res.send("Hello World");
