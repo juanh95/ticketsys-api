@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType } from "sequelize-typescript";
 
 interface UserAttributes {
-  // id: number;
+  id?: number;
   FirstName: string;
   LastName: string;
   Email?: string;
@@ -17,7 +17,7 @@ interface UserAttributes {
 
 @Table
 export class User extends Model<UserAttributes> implements UserAttributes {
-  // public id!: number;
+  public id?: number;
 
   @Column(DataType.STRING)
   public FirstName!: string;

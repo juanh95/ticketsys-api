@@ -37,12 +37,9 @@ export const listUsers: RequestHandler = async (req, res, next) => {
 
 export const deleteUser: RequestHandler = async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.params.id);
-    if (user == null) {
-      return res.status(404).json({ message: "User was not found" });
-    }
-
-    await user?.destroy();
+    const deletedUserCount = await User.destroy({
+      where: { id: req.params.id },
+    });
 
     return res.status(200).json({ message: "User has been deleted" });
   } catch (error) {
