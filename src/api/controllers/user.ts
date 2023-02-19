@@ -16,6 +16,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
       Phone: req.body.phone,
     };
 
+    // need to implement service
     const newUser = await User.create(userInfo);
 
     res
