@@ -80,7 +80,7 @@ export const updateUser: RequestHandler = async (req, res, next) => {
       message: "User information was updated",
     });
   } catch (error) {
-    return res.status(500).json({ message: "Unable to update user due to" });
+    return res.status(500).json({ message: "Unable to update user" });
   }
 };
 
