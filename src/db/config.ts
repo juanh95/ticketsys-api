@@ -2,6 +2,7 @@ import dbConfig from "../config/dbConfig";
 
 import { Sequelize } from "sequelize-typescript";
 import { User } from "./models/User";
+import { Token } from "./models/Token";
 
 /*
   Configure database connection details here. Also include the models you will be working with 
@@ -19,7 +20,7 @@ const sequelizeConnection = new Sequelize({
     acquire: dbConfig.pool.aquire,
     idle: dbConfig.pool.idle,
   },
-  models: [User],
+  models: [User, Token],
 });
 
 export default sequelizeConnection;

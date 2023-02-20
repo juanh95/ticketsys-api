@@ -1,4 +1,12 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  HasOne,
+} from "sequelize-typescript";
+import { Token } from "./Token";
 
 interface UserAttributes {
   id?: number;
@@ -17,6 +25,8 @@ interface UserAttributes {
 
 @Table
 export class User extends Model<UserAttributes> implements UserAttributes {
+  @PrimaryKey
+  @Column(DataType.NUMBER)
   public id?: number;
 
   @Column(DataType.STRING)
@@ -36,6 +46,9 @@ export class User extends Model<UserAttributes> implements UserAttributes {
 
   @Column(DataType.STRING)
   public Pass!: string;
+
+  @HasOne(() => Token)
+  public token!: Token;
 
   // timestamps!
 
