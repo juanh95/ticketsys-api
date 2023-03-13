@@ -28,12 +28,3 @@ const strategy = new JwtStrategy(options, async (payload, done) => {
 });
 
 export default strategy;
-
-// export default function (passport: Passport) {
-//   passport.use(strategy);
-//   console.log("Got to the default");
-// }
-
-// passport.serializeUser((user:User, done) => {
-//     done(null, )
-// })
