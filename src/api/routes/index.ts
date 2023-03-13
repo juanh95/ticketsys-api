@@ -4,7 +4,7 @@ import userRouter from "./users";
 
 const router = Router();
 
-router.use("/users", userRouter);
-router.use("/tokens", tokenRouter);
+router.use("/user", userRouter);
+// router.use("/token", tokenRouter);
 
 export default router;

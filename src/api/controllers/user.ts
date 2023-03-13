@@ -1,10 +1,13 @@
 import { RequestHandler } from "express";
 import { User } from "../../db/models/User";
+import * as utils from "../../crypto/utils";
 import bcrypt from "bcrypt";
+import { Json } from "sequelize/types/utils";
 
 export const createUser: RequestHandler = async (req, res, next) => {
   try {
-    const hash = await bcrypt.hash(req.body.password, 10);
+    const salt = await utils.genSalt();
+    const hash = await utils.genHash(req.body.password, salt);
 
     //needs to utilize Data Access Layer
     let userInfo = {
@@ -12,16 +15,22 @@ export const createUser: RequestHandler = async (req, res, next) => {
       LastName: req.body.lastname,
       Email: req.body.email,
       Department: req.body.department,
-      Pass: hash,
+      Hash: hash,
+      Salt: salt,
       Phone: req.body.phone,
     };
 
     // need to implement service
     const newUser = await User.create(userInfo);
 
-    res
-      .status(200)
-      .json({ message: "User created successfully", data: newUser });
+    const jwt = utils.issueJWT(newUser);
+
+    res.status(200).json({
+      message: "User created successfully",
+      data: newUser,
+      token: jwt.token,
+      expiresIn: jwt.expires,
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to create user" });
   }
@@ -86,15 +95,47 @@ export const updateUser: RequestHandler = async (req, res, next) => {
 
 export const retrieveUser: RequestHandler = async (req, res, next) => {
   try {
-    const userInfo = await User.findByPk(req.params.id);
+    const user: User = req.user as User;
 
-    if (userInfo == null) {
+    if (user == null) {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    return res.status(200).json({ message: "User found!", data: userInfo });
+    return res.status(200).json({ message: "User found!", data: user });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Unable to retrieve user!" });
+  }
+};
+
+export const loginUser: RequestHandler = async (req, res, next) => {
+  try {
+    const userInfo = await User.findOne({ where: { Email: req.body.email } });
+
+    if (userInfo == null) {
+      return res
+        .status(404)
+        .json({ message: "User with that email was not found" });
+    }
+
+    const match = await utils.validPassword(req.body.password, userInfo.Hash);
+
+    if (match) {
+      const jwt = utils.issueJWT(userInfo);
+
+      return res.status(200).json({
+        success: true,
+        token: jwt.token,
+        expiresIn: jwt.expires,
+      });
+    } else {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Unable to process user login", error: error });
   }
 };

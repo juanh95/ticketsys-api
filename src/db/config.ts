@@ -20,7 +20,8 @@ const sequelizeConnection = new Sequelize({
     acquire: dbConfig.pool.aquire,
     idle: dbConfig.pool.idle,
   },
-  models: [User, Token],
+  // models: [User, Token],
+  models: [User],
 });
 
 export default sequelizeConnection;

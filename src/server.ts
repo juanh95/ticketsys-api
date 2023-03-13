@@ -2,6 +2,8 @@ import express, { Application, Express, Request, Response } from "express";
 import cors from "cors";
 import router from "./api/routes/index";
 import dbInit from "./db/init";
+import passport from "passport";
+import strategy from "./api/services/authService";
 
 const app: Application = express();
 const PORT = process.env.PORT || 8080;
@@ -16,6 +18,9 @@ var corOptions = {
 app.use(cors(corOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+passport.use(strategy);
+app.use(passport.initialize());
 
 //routers and routes
 

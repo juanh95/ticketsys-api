@@ -5,6 +5,7 @@ import {
   DataType,
   PrimaryKey,
   HasOne,
+  AutoIncrement,
 } from "sequelize-typescript";
 import { Token } from "./Token";
 
@@ -15,7 +16,8 @@ interface UserAttributes {
   Email?: string;
   Department?: string;
   Phone?: string;
-  Pass: string;
+  Hash: string;
+  Salt: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -25,9 +27,10 @@ interface UserAttributes {
 
 @Table
 export class User extends Model<UserAttributes> implements UserAttributes {
+  @AutoIncrement
   @PrimaryKey
-  @Column(DataType.NUMBER)
-  public id?: number;
+  @Column(DataType.INTEGER)
+  public id!: number;
 
   @Column(DataType.STRING)
   public FirstName!: string;
@@ -45,10 +48,13 @@ export class User extends Model<UserAttributes> implements UserAttributes {
   public Phone!: string;
 
   @Column(DataType.STRING)
-  public Pass!: string;
+  public Hash!: string;
 
-  @HasOne(() => Token)
-  public token!: Token;
+  @Column(DataType.STRING)
+  public Salt!: string;
+
+  // @HasOne(() => Token)
+  // public token!: Token;
 
   // timestamps!
 
