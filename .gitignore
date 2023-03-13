@@ -2,3 +2,4 @@
 /src/config
 /node_modules
 dist
+/src/crypto
