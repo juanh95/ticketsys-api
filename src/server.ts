@@ -3,7 +3,7 @@ import cors from "cors";
 import router from "./api/routes/index";
 import dbInit from "./db/init";
 import passport from "passport";
-import strategy from "./api/services/authService";
+import strategy from "./config/passportConfig";
 
 const app: Application = express();
 const PORT = process.env.PORT || 8080;

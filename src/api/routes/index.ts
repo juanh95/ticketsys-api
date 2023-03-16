@@ -1,6 +1,6 @@
 import { Router } from "express";
-import tokenRouter from "./tokens";
-import userRouter from "./users";
+// import tokenRouter from "./tokens";
+import userRouter from "./users/index";
 
 const router = Router();
 

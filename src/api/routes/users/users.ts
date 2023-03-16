@@ -1,36 +1,18 @@
 import { RequestHandler } from "express";
-import { User } from "../../db/models/User";
-import * as utils from "../../crypto/utils";
+import { User } from "../../../db/models/User";
+import * as utils from "../../../crypto/utils";
 import bcrypt from "bcrypt";
 import { Json } from "sequelize/types/utils";
+import { CreateUserDTO } from "../../dto/user.dto";
+import * as userController from "../../controllers/user/index";
 
 export const createUser: RequestHandler = async (req, res, next) => {
   try {
-    const salt = await utils.genSalt();
-    const hash = await utils.genHash(req.body.password, salt);
+    const payload: CreateUserDTO = req.body;
+    console.log("arrived at the router");
+    const result = await userController.create(payload);
 
-    //needs to utilize Data Access Layer
-    let userInfo = {
-      FirstName: req.body.firstname,
-      LastName: req.body.lastname,
-      Email: req.body.email,
-      Department: req.body.department,
-      Hash: hash,
-      Salt: salt,
-      Phone: req.body.phone,
-    };
-
-    // need to implement service
-    const newUser = await User.create(userInfo);
-
-    const jwt = utils.issueJWT(newUser);
-
-    res.status(200).json({
-      message: "User created successfully",
-      data: newUser,
-      token: jwt.token,
-      expiresIn: jwt.expires,
-    });
+    res.status(200).send(result);
   } catch (error) {
     res.status(500).json({ message: "Failed to create user" });
   }
@@ -74,11 +56,11 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   try {
     const arr = await User.update(
       {
-        FirstName: userInfo.firstname,
-        LastName: userInfo.lastname,
-        Phone: userInfo.phone,
-        Email: userInfo.email,
-        Department: userInfo.department,
+        firstName: userInfo.firstname,
+        lastName: userInfo.lastname,
+        phone: userInfo.phone,
+        email: userInfo.email,
+        department: userInfo.department,
       },
       {
         where: { id: userInfo.id },
@@ -110,7 +92,7 @@ export const retrieveUser: RequestHandler = async (req, res, next) => {
 
 export const loginUser: RequestHandler = async (req, res, next) => {
   try {
-    const userInfo = await User.findOne({ where: { Email: req.body.email } });
+    const userInfo = await User.findOne({ where: { email: req.body.email } });
 
     if (userInfo == null) {
       return res
@@ -118,7 +100,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
         .json({ message: "User with that email was not found" });
     }
 
-    const match = await utils.validPassword(req.body.password, userInfo.Hash);
+    const match = await utils.validPassword(req.body.password, userInfo.pwd);
 
     if (match) {
       const jwt = utils.issueJWT(userInfo);

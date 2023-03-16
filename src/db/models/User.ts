@@ -1,3 +1,4 @@
+import { Optional } from "sequelize";
 import {
   Table,
   Column,
@@ -7,51 +8,54 @@ import {
   HasOne,
   AutoIncrement,
 } from "sequelize-typescript";
-import { Token } from "./Token";
 
 interface UserAttributes {
   id?: number;
-  FirstName: string;
-  LastName: string;
-  Email?: string;
-  Department?: string;
-  Phone?: string;
-  Hash: string;
-  Salt: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  department?: string;
+  phone?: string;
+  pwd: string;
+  salt: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
 }
 
-// interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+export interface UserInput extends Optional<UserAttributes, "id" | "salt"> {}
+export interface UserOutput extends Required<UserAttributes> {}
 
 @Table
-export class User extends Model<UserAttributes> implements UserAttributes {
+export class User
+  extends Model<UserAttributes, UserInput>
+  implements UserAttributes
+{
   @AutoIncrement
   @PrimaryKey
   @Column(DataType.INTEGER)
   public id!: number;
 
   @Column(DataType.STRING)
-  public FirstName!: string;
+  public firstName!: string;
 
   @Column(DataType.STRING)
-  public LastName!: string;
+  public lastName!: string;
 
   @Column(DataType.STRING)
-  public Email!: string;
+  public email!: string;
 
   @Column(DataType.STRING)
-  public Department!: string;
+  public department!: string;
 
   @Column(DataType.STRING)
-  public Phone!: string;
+  public phone!: string;
 
   @Column(DataType.STRING)
-  public Hash!: string;
+  public pwd!: string;
 
   @Column(DataType.STRING)
-  public Salt!: string;
+  public salt!: string;
 
   // @HasOne(() => Token)
   // public token!: Token;

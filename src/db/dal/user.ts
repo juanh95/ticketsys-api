@@ -1,15 +1,11 @@
-// import { User } from "../models/User";
+import { User, UserInput, UserOutput } from "../models/User";
+import * as util from "../../crypto/utils";
 
-// export const create = async (payload: UserInput): Promise<UserOuput> => {
-//   const user = await User.create(payload);
-//   return user;
-// };
+export const create = async (payload: UserInput): Promise<UserOutput> => {
+  payload.salt = await util.genSalt();
+  payload.pwd = await util.genHash(payload.pwd, payload.salt);
 
-// export const getById = async (id: number): Promise<UserOuput> => {
-//   const user = await User.findByPk(id);
-//   if (!user) {
-//     // @todo throw custom error
-//     throw new Error("not found");
-//   }
-//   return user;
-// };
+  const user = await User.create(payload);
+
+  return user;
+};

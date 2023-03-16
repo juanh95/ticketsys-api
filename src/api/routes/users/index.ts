@@ -5,7 +5,7 @@ import {
   loginUser,
   retrieveUser,
   updateUser,
-} from "../controllers/user";
+} from "./users";
 import passport from "passport";
 import { Router } from "express";
 
