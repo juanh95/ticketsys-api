@@ -1,6 +1,5 @@
 .env 
 /src/config
+/src/crypto
 /node_modules
 dist
-/src/crypto/id_rsa_priv.pem
-/src/crypto/id_rsa_pub.pem
