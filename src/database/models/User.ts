@@ -7,10 +7,15 @@ import {
   PrimaryKey,
   HasOne,
   AutoIncrement,
+  Unique,
+  BelongsToMany,
+  HasMany,
 } from "sequelize-typescript";
+import { Ticket } from "./Ticket";
+import { UserTicket } from "./UserTicket";
 
 interface UserAttributes {
-  id?: number;
+  id: number;
   firstName: string;
   lastName: string;
   email?: string;
@@ -42,6 +47,7 @@ export class User
   @Column(DataType.STRING)
   public lastName!: string;
 
+  @Unique
   @Column(DataType.STRING)
   public email!: string;
 
@@ -57,11 +63,19 @@ export class User
   @Column(DataType.STRING)
   public salt!: string;
 
+  @HasMany(() => Ticket)
+  public assignedTickets?: Ticket[];
+
+  @HasMany(() => Ticket)
+  public reportedTickets?: Ticket[];
+
+  @HasMany(() => Ticket)
+  public affectedTickets?: Ticket[];
+
   // @HasOne(() => Token)
   // public token!: Token;
 
   // timestamps!
-
   public readonly createdAt!: Date;
 
   public readonly updatedAt!: Date;

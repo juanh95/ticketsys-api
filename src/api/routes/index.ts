@@ -1,10 +1,11 @@
 import { Router } from "express";
-// import tokenRouter from "./tokens";
+import ticketRouter from "./tickets";
 import userRouter from "./users/index";
 
 const router = Router();
 
-router.use("/user", userRouter);
+router.use("/users", userRouter);
+router.use("/tickets", ticketRouter);
 // router.use("/token", tokenRouter);
 
 export default router;

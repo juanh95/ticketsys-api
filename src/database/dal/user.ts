@@ -9,3 +9,8 @@ export const create = async (payload: UserInput): Promise<UserOutput> => {
 
   return user;
 };
+
+export const retrieve = async (payload: string): Promise<UserOutput | null> => {
+  const result = await User.findOne({ where: { email: payload } });
+  return result;
+};

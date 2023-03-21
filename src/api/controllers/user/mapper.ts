@@ -1,5 +1,5 @@
 import { User } from "../../interfaces/index";
-import { UserOutput } from "../../../db/models/User";
+import { UserOutput } from "../../../database/models/User";
 
 export const toUser = (user: UserOutput): User => {
   return {

@@ -1,5 +1,5 @@
 import jsonwebtoken from "jsonwebtoken";
-import { User } from "../db/models/User";
+import { User } from "../api/interfaces/index";
 import bcrypt from "bcrypt";
 
 import fs from "fs";
@@ -12,7 +12,7 @@ const saltRounds = 10;
 
 export async function validPassword(password: string, hash: string) {
   try {
-    const match = await bcrypt.compare(password, hash);
+    const match = await bcrypt.compareSync(password, hash);
 
     return match;
   } catch (error) {

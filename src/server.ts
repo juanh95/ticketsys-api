@@ -1,7 +1,7 @@
 import express, { Application, Express, Request, Response } from "express";
 import cors from "cors";
 import router from "./api/routes/index";
-import dbInit from "./db/init";
+import dbInit from "./database/init";
 import passport from "passport";
 import strategy from "./config/passportConfig";
 

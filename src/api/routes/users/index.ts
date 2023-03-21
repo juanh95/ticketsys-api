@@ -1,36 +1,30 @@
-import {
-  createUser,
-  deleteUser,
-  listUsers,
-  loginUser,
-  retrieveUser,
-  updateUser,
-} from "./users";
+import { create, login, retrieveFromJwt } from "./users";
 import passport from "passport";
 import { Router } from "express";
 
 const userRouter = Router();
 
-userRouter.get("/", listUsers);
+// userRouter.get("/", listUsers);
 
-userRouter.post("/register", createUser);
+userRouter.post("/register", create);
 
-userRouter.post("/login", loginUser);
+userRouter.post("/login", login);
 
-userRouter.delete(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  deleteUser
-);
-userRouter.put(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  updateUser
-);
 userRouter.get(
   "/myaccount",
   passport.authenticate("jwt", { session: false }),
-  retrieveUser
+  retrieveFromJwt
 );
+
+// userRouter.delete(
+//   "/:id",
+//   passport.authenticate("jwt", { session: false }),
+//   deleteUser
+// );
+// userRouter.put(
+//   "/:id",
+//   passport.authenticate("jwt", { session: false }),
+//   updateUser
+// );
 
 export default userRouter;

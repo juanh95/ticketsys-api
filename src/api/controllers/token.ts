@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import { Token } from "../../db/models/Token";
-import { User } from "../../db/models/User";
+import { Token } from "../../database/models/Token";
+import { User } from "../../database/models/User";
 
 export const createToken: RequestHandler = async (req, res, next) => {
   // TODO: Ready to implement JSON Web Tokens
