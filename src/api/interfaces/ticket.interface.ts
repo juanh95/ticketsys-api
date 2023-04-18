@@ -8,4 +8,9 @@ export interface Ticket {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
+  priority: string;
+  category: string;
+  title: string;
+  affectedItem: string;
+  phone: string;
 }

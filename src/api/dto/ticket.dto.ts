@@ -4,4 +4,9 @@ export type CreateTicketDTO = {
   reportedId: number;
   affectedId: number;
   assignedId: number;
+  title: string;
+  priority: string;
+  category: string;
+  affectedItem: string;
+  phone: string;
 };

@@ -27,6 +27,11 @@ interface TicketAttributes {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
+  priority: string;
+  title: string;
+  category: string;
+  affectedItem: string;
+  phone: string;
 }
 
 export interface TicketInput
@@ -52,6 +57,21 @@ export class Ticket
 
   @Column(DataType.STRING)
   public description!: string;
+
+  @Column(DataType.STRING)
+  public title!: string;
+
+  @Column(DataType.STRING)
+  public category!: string;
+
+  @Column(DataType.STRING)
+  public priority!: string;
+
+  @Column(DataType.STRING)
+  public affectedItem!: string;
+
+  @Column(DataType.STRING)
+  public phone!: string;
 
   @BelongsTo(() => User)
   public assigned?: User;

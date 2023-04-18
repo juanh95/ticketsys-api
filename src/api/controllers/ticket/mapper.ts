@@ -12,5 +12,10 @@ export const toTicket = (ticket: TicketOutput): Ticket => {
     createdAt: ticket.createdAt,
     updatedAt: ticket.updatedAt,
     deletedAt: ticket.deletedAt,
+    priority: ticket.priority,
+    category: ticket.category,
+    affectedItem: ticket.affectedItem,
+    title: ticket.title,
+    phone: ticket.phone,
   };
 };
