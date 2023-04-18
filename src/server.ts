@@ -10,12 +10,15 @@ const PORT = process.env.PORT || 8080;
 
 dbInit();
 
-var corOptions = {
-  origin: `http://localhost:${PORT}`,
-};
+// var corOptions = {
+//   origin: `http://localhost:${PORT}`,
+//   credentials: true, //access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// };
 
 // middleware
-app.use(cors(corOptions));
+// app.use(cors(corOptions));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
