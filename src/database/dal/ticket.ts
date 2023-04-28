@@ -28,6 +28,9 @@ export const list = async (
         where: { assignedId: id },
       });
       break;
+    case "all":
+      result = await Ticket.findAll();
+      break;
   }
 
   return result;
