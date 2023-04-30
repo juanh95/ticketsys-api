@@ -1,5 +1,5 @@
 .env 
-/src/config
+/src/config/dbConfig.ts
 /src/crypto/id_rsa_priv.pem
 /src/crypto/id_rsa_pub.pem
 /node_modules
