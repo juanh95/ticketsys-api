@@ -32,25 +32,21 @@ const strategy = new JwtStrategy(options, async (payload, done) => {
       return done(null, false);
    }
 
-   // Decode the payload using jwt.decode() which returns an object or null.
-   const decoded = jwt.decode(payload);
-
-   // Declare a variable named decodedData with a type of JwtPayload and assign decoded object
-   // to it after typecasting as JwtPayload.
-   const decodedData: JwtPayload = decoded as JwtPayload;
+   // Decoded token gets casted as JwtPayload
+   const decodedData: JwtPayload = payload as JwtPayload;
 
    // Get current time in seconds since EPOCH
-   const now = Date.now() / 1000;
+   const now = Math.floor(Date.now() / 1000);
 
    // Check if decoded data does not have exp value or if it has expired, then call done function with false argument.
-   if (!decodedData.exp || now > decodedData.exp) {
+   if (decodedData?.exp && now > Math.floor(decodedData.exp / 1000)) {
       return done(null, false);
    }
 
    // try-catch block to handle errors while fetching user data asynchronously
    try {
       // Finding a user record from the database based on the value of the 'sub' property in the JWT payload
-      const user = await User.findByPk(payload.sub);
+      const user = await User.findByPk(decodedData.sub);
 
       if (user) {
          //If user is not null i.e., user exists in our DB then its passed as a first parameter to 'done' callback function.
