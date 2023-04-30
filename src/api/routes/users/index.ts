@@ -1,4 +1,4 @@
-import { create, login, retrieveFromJwt } from "./users";
+import { create, login, retrieveUser } from "./users";
 import passport from "passport";
 import { Router } from "express";
 
@@ -11,9 +11,9 @@ userRouter.post("/register", create);
 userRouter.post("/login", login);
 
 userRouter.get(
-  "/myaccount",
-  passport.authenticate("jwt", { session: false }),
-  retrieveFromJwt
+   "/myaccount",
+   passport.authenticate("jwt", { session: false }),
+   retrieveUser
 );
 
 // userRouter.delete(

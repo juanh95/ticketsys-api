@@ -52,7 +52,8 @@ export const login: RequestHandler = async (req, res, next) => {
    }
 };
 
-export const retrieveFromJwt: RequestHandler = async (req, res, next) => {
+// TODO: Needs to have the ability to retrieve a another user by id as well
+export const retrieveUser: RequestHandler = async (req, res, next) => {
    try {
       const user: User = req.user as User;
 
