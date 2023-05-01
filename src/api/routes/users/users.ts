@@ -39,6 +39,7 @@ export const login: RequestHandler = async (req, res, next) => {
             success: true,
             token: jwt.token,
             expiresIn: jwt.expires,
+            user: user.firstName,
          });
       } else {
          return res
