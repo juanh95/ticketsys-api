@@ -31,7 +31,8 @@ export async function validPassword(password: string, hash: string) {
 export function issueJWT(user: User) {
    // Extract user id and set expiration time for token
    const id = user.id;
-   const expiresIn = "2hr";
+   // Milliseconds from now
+   const expiresIn = 7200000;
 
    // Create payload with user id and issued at time
    const payload = {
