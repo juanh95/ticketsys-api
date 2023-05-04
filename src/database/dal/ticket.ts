@@ -1,37 +1,42 @@
 import { Ticket, TicketInput, TicketOutput } from "../models/Ticket";
 
 export const create = async (payload: TicketInput): Promise<TicketOutput> => {
-  const ticket = await Ticket.create(payload);
+   const ticket = await Ticket.create(payload);
 
-  return ticket;
+   return ticket;
 };
 
 export const list = async (
-  id: number,
-  option: string
+   id: number,
+   status: string
 ): Promise<TicketOutput[]> => {
-  let result: Ticket[] = [];
+   let result: Ticket[] = [];
 
-  switch (option) {
-    case "reported":
-      result = await Ticket.findAll({
-        where: { reportedId: id },
-      });
-      break;
-    case "affected":
-      result = await Ticket.findAll({
-        where: { affectedId: id },
-      });
-      break;
-    case "assigned":
-      result = await Ticket.findAll({
-        where: { assignedId: id },
-      });
-      break;
-    case "all":
-      result = await Ticket.findAll();
-      break;
-  }
+   switch (status) {
+      case "open":
+         result = await Ticket.findAll({
+            where: { status: "Open" },
+         });
+         break;
+      case "closed":
+         result = await Ticket.findAll({
+            where: { status: "Closed" },
+         });
+         break;
+      case "in-progress":
+         result = await Ticket.findAll({
+            where: { status: "In Progress" },
+         });
+         break;
+      case "new":
+         result = await Ticket.findAll({
+            where: { status: "New" },
+         });
+         break;
+      default:
+         result = await Ticket.findAll();
+         break;
+   }
 
-  return result;
+   return result;
 };

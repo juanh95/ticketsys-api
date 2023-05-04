@@ -17,8 +17,8 @@ export const create: RequestHandler = async (req, res, next) => {
 export const list: RequestHandler = async (req, res, next) => {
    try {
       const id: number = Number(req.query.id);
-      const option: string = String(req.query.option);
-      const result = await ticketController.listReported(id, option);
+      const status: string = String(req.query.status);
+      const result = await ticketController.listReported(id, status);
 
       res.status(200).json({ data: result });
    } catch (error) {
