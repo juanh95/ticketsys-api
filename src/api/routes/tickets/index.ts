@@ -5,6 +5,6 @@ const ticketRouter = Router();
 
 // TODO: Need to review how to properly name endpoints
 ticketRouter.post("/", create);
-ticketRouter.get("/filter", list);
+ticketRouter.get("/", list);
 
 export default ticketRouter;
