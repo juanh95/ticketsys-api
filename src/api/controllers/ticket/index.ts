@@ -7,16 +7,10 @@ export const create = async (payload: CreateTicketDTO): Promise<Ticket> => {
    return mapper.toTicket(await service.create(payload));
 };
 
-export const listReported = async (
-   id: number,
-   status: string
-): Promise<Ticket[]> => {
-   const result = await service.list(id, status);
-   let formattedResult: Ticket[] = [];
-
-   result.forEach((ticket) => {
-      formattedResult.push(mapper.toTicket(ticket));
-   });
-
+export const listReported = async (...params: any[]): Promise<Ticket[]> => {
+   const result = await service.list(...params);
+   const formattedResult: Ticket[] = result.map((ticket) =>
+      mapper.toTicket(ticket)
+   );
    return formattedResult;
 };
