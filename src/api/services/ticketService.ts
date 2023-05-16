@@ -12,6 +12,10 @@ export const list = async (...params: any[]): Promise<TicketOutput[]> => {
 
    const whereClause: any = {};
 
+   if (id) {
+      whereClause.id = id;
+   }
+
    if (status) {
       whereClause.status = status;
    }
