@@ -17,10 +17,11 @@ interface CommentAttributes {
    ticketId: number;
    userId: number;
    commentBody: string;
-   createdAt: Date;
+   createdAt?: Date;
 }
 
 export interface CommentInput extends Optional<CommentAttributes, "id"> {}
+export interface CommentOutput extends Required<CommentAttributes> {}
 
 @Table
 export class Comment
