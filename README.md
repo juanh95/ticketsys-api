@@ -52,14 +52,16 @@ export default dbConfig;
 
 The following features are available:
 
-### `GET /tickets/filter`
+### `GET api/tickets`
 
-Get a list of tickets.
+This endpoint is responsible for retrieving a list of tickets with the specified id, status, category, and priority properties from the server.
 
 #### Query parameters
 
-- `status`: Filter by ticket status (optional). Possible values: `open`, `closed`.
-- `priority`: Filter by ticket priority (optional). Possible values: `low`, `medium`, `high`.
+- id: A string representing the ticket ID.
+- status: A string representing the status of the ticket (e.g. "open", "closed", "pending").
+- category: A string representing the category of the ticket (e.g. "technical", "billing", "general").
+- priority: A string representing the priority of the ticket (e.g. "high", "medium", "low").
 
 ### `GET /tickets/:id`
 
@@ -101,6 +103,17 @@ Delete a ticket.
 
 - `id`: The ID of the ticket.
 
+### `GET api/comments`
+
+This endpoint is responsible for creating and adding a comment to a ticket posted by a user
+
+#### Request body
+
+- `ticketId` (required): The ticket ID the comment is for (number)
+- `userId` (required): The user ID who posted the comment (number)
+- `commentBody` (required): The body of the comment (string)
+
+
 ## Error Handling
 
 This API uses standard HTTP status codes to indicate success or failure of requests. In case of an error, a JSON response with the following format will be returned:
@@ -124,3 +137,5 @@ Contributions are welcome! If you find a bug or have a feature request, please o
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+# 
