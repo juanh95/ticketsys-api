@@ -103,7 +103,7 @@ Delete a ticket.
 
 - `id`: The ID of the ticket.
 
-### `GET api/comments`
+### `POST api/comments`
 
 This endpoint is responsible for creating and adding a comment to a ticket posted by a user
 
