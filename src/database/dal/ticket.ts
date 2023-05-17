@@ -42,9 +42,16 @@ export const create = async (payload: TicketInput): Promise<TicketOutput> => {
 export const list = async (whereClause: any): Promise<TicketOutput[]> => {
    let result: Ticket[] = [];
 
-   result = await Ticket.findAll({
-      where: whereClause,
-   });
+   if (whereClause.id) {
+      result = await Ticket.findAll({
+         where: whereClause,
+         include: "comments",
+      });
+   } else {
+      result = await Ticket.findAll({
+         where: whereClause,
+      });
+   }
 
    return result;
 };

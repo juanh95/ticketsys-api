@@ -8,27 +8,24 @@ export const create = async (payload: TicketInput): Promise<TicketOutput> => {
 export const list = async (...params: any[]): Promise<TicketOutput[]> => {
    const [id = null, status = null, category = null, priority = null] = params;
 
-   console.log(params);
-
    const whereClause: any = {};
 
+   // If we're looking for a ticket with a specific ID, no need to include the other fields
    if (id) {
       whereClause.id = id;
-   }
+   } else {
+      if (status) {
+         whereClause.status = status;
+      }
 
-   if (status) {
-      whereClause.status = status;
-   }
+      if (priority) {
+         whereClause.priority = priority;
+      }
 
-   if (priority) {
-      whereClause.priority = priority;
+      if (category) {
+         whereClause.category = category;
+      }
    }
-
-   if (category) {
-      whereClause.category = category;
-   }
-
-   console.log(whereClause);
 
    return ticketDal.list(whereClause);
 };

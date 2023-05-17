@@ -33,10 +33,11 @@ interface TicketAttributes {
    category: string;
    affectedItem: string;
    phone: string;
+   comments: Comment[];
 }
 
 export interface TicketInput
-   extends Optional<TicketAttributes, "id" | "assignedId"> {}
+   extends Optional<TicketAttributes, "id" | "assignedId" | "comments"> {}
 export interface TicketOutput
    extends Optional<TicketAttributes, "assignedId"> {}
 
@@ -92,7 +93,7 @@ export class Ticket
    public affected!: User;
 
    @HasMany(() => Comment)
-   public comments!: Comment;
+   public comments!: Comment[];
 
    @ForeignKey(() => User)
    @Column(DataType.INTEGER)
