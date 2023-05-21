@@ -29,3 +29,15 @@ export const list = async (...params: any[]): Promise<TicketOutput[]> => {
 
    return ticketDal.list(whereClause);
 };
+
+export const retrieve = async (id: number): Promise<TicketOutput> => {
+   return ticketDal.retrieve(id);
+};
+
+// TODO: Need to be able to update the users related to the ticket
+export const update = async (
+   id: number,
+   fields: any
+): Promise<TicketOutput> => {
+   return ticketDal.update(id, fields);
+};

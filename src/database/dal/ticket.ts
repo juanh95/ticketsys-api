@@ -7,38 +7,9 @@ export const create = async (payload: TicketInput): Promise<TicketOutput> => {
    return ticket;
 };
 
-// export const list = async (...params: any[]): Promise<TicketOutput[]> => {
-//    let result: Ticket[] = [];
+import { UpdateOptions } from "sequelize";
 
-//    switch (status) {
-//       case "open":
-//          result = await Ticket.findAll({
-//             where: { status: "Open", },
-//          });
-//          break;
-//       case "closed":
-//          result = await Ticket.findAll({
-//             where: { status: "Closed" },
-//          });
-//          break;
-//       case "in-progress":
-//          result = await Ticket.findAll({
-//             where: { status: "In Progress" },
-//          });
-//          break;
-//       case "new":
-//          result = await Ticket.findAll({
-//             where: { status: "New" },
-//          });
-//          break;
-//       default:
-//          result = await Ticket.findAll();
-//          break;
-//    }
-
-//    return result;
-// };
-
+//Might Need to Specify list and retrieve
 export const list = async (whereClause: any): Promise<TicketOutput[]> => {
    let result: Ticket[] = [];
 
@@ -54,4 +25,40 @@ export const list = async (whereClause: any): Promise<TicketOutput[]> => {
    }
 
    return result;
+};
+
+export const retrieve = async (id: number): Promise<TicketOutput> => {
+   const ticket = await Ticket.findByPk(id);
+
+   if (ticket === null) {
+      const err = new Error("No Ticket Found with ID: " + id);
+      console.log(err);
+      throw err;
+   }
+
+   return ticket;
+};
+
+export const update = async (id: number, fields: any): Promise<any> => {
+   const updateOptions: UpdateOptions = {
+      where: { id: id },
+   };
+
+   const updatedTicket = await Ticket.update(fields, updateOptions);
+
+   if (updatedTicket[0] === 0) {
+      const err = new Error("No Ticket Found with ID: " + id);
+      console.log(err);
+      throw err;
+   }
+
+   const ticket = await Ticket.findByPk(id);
+
+   if (ticket === null) {
+      const err = new Error("No Ticket Found with ID: " + id);
+      console.log(err);
+      throw err;
+   }
+
+   return ticket;
 };
