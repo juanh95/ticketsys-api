@@ -1,10 +1,10 @@
-import { create, login, retrieveUser } from "./users";
+import { create, login, retrieve, list } from "./users";
 import passport from "passport";
 import { Router } from "express";
 
 const userRouter = Router();
 
-// userRouter.get("/", listUsers);
+userRouter.get("/", list);
 
 userRouter.post("/register", create);
 
@@ -13,7 +13,7 @@ userRouter.post("/login", login);
 userRouter.get(
    "/myaccount",
    passport.authenticate("jwt", { session: false }),
-   retrieveUser
+   retrieve
 );
 
 // userRouter.delete(

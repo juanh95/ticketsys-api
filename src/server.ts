@@ -4,6 +4,7 @@ import router from "./api/routes/index";
 import dbInit from "./database/init";
 import passport from "passport";
 import strategy from "./config/passportConfig";
+import { errorHandler } from "./lib/errorHandler";
 
 const app: Application = express();
 const PORT = process.env.PORT || 8080;
@@ -30,7 +31,9 @@ app.use(passport.initialize());
 app.use("/api", router);
 
 app.use("/home", (req, res) => {
-  res.send("Hello World");
+   res.send("Hello World");
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Alive on ${PORT}`));

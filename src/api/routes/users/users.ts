@@ -54,7 +54,7 @@ export const login: RequestHandler = async (req, res, next) => {
 };
 
 // TODO: Needs to have the ability to retrieve a another user by id as well
-export const retrieveUser: RequestHandler = async (req, res, next) => {
+export const retrieve: RequestHandler = async (req, res, next) => {
    try {
       const user: User = req.user as User;
 
@@ -69,13 +69,13 @@ export const retrieveUser: RequestHandler = async (req, res, next) => {
    }
 };
 
-// export const listUsers: RequestHandler = async (req, res, next) => {
-//   const usersList: User[] = await User.findAll();
+export const list: RequestHandler = async (req, res, next) => {
+   const usersList: User[] = await User.findAll();
 
-//   return res
-//     .status(200)
-//     .json({ message: "Users fetched successfully", data: usersList });
-// };
+   return res
+      .status(200)
+      .json({ message: "Users fetched successfully", data: usersList });
+};
 
 // export const deleteUser: RequestHandler = async (req, res, next) => {
 //   try {

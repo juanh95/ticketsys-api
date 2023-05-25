@@ -2,6 +2,7 @@ import { Router } from "express";
 import ticketRouter from "./tickets";
 import userRouter from "./users/index";
 import commentRouter from "./comments";
+import { tryCatch } from "../../lib/tryCatch";
 
 const router = Router();
 

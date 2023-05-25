@@ -1,8 +1,14 @@
 import { Ticket, TicketInput, TicketOutput } from "../models/Ticket";
 import { Op } from "sequelize";
+import { ServerError } from "../../lib/ServerError";
 
 export const create = async (payload: TicketInput): Promise<TicketOutput> => {
    const ticket = await Ticket.create(payload);
+
+   if (ticket === null) {
+      const err = new ServerError("Unable to Create Record in MySQL", 500);
+      err.name = "Record Error";
+   }
 
    return ticket;
 };
@@ -31,8 +37,9 @@ export const retrieve = async (id: number): Promise<TicketOutput> => {
    const ticket = await Ticket.findByPk(id);
 
    if (ticket === null) {
-      const err = new Error("No Ticket Found with ID: " + id);
-      console.log(err);
+      const err = new ServerError("No Ticket Found with ID: " + id, 404);
+      err.name = "Invalid ID";
+
       throw err;
    }
 
@@ -47,16 +54,16 @@ export const update = async (id: number, fields: any): Promise<any> => {
    const updatedTicket = await Ticket.update(fields, updateOptions);
 
    if (updatedTicket[0] === 0) {
-      const err = new Error("No Ticket Found with ID: " + id);
-      console.log(err);
+      const err = new ServerError("No Ticket Found with ID: " + id, 404);
+      err.name = "Invalid ID";
       throw err;
    }
 
    const ticket = await Ticket.findByPk(id);
 
    if (ticket === null) {
-      const err = new Error("No Ticket Found with ID: " + id);
-      console.log(err);
+      const err = new ServerError("No Ticket Found with ID: " + id, 404);
+      err.name = "Invalid ID";
       throw err;
    }
 
