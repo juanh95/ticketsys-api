@@ -4,20 +4,20 @@ import * as mapper from "./mapper";
 import * as service from "../../services/userService";
 
 export const create = async (payload: CreateUserDTO): Promise<User> => {
-  return mapper.toUser(await service.create(payload));
+   return mapper.toUser(await service.create(payload));
 };
 
 export const retrieve = async (payload: string): Promise<User | null> => {
-  return await service.retrieve(payload);
+   return await service.retrieve(payload);
 };
 
-// export const listUsers: RequestHandler = async (req, res, next) => {
-//   const usersList: User[] = await User.findAll();
+export const list = async (...params: any[]): Promise<User[]> => {
+   const result = await service.list(...params);
 
-//   return res
-//     .status(200)
-//     .json({ message: "Users fetched successfully", data: usersList });
-// };
+   const formattedResult: User[] = result.map((user) => mapper.toUser(user));
+
+   return formattedResult;
+};
 
 // export const deleteUser: RequestHandler = async (req, res, next) => {
 //   try {

@@ -1,5 +1,5 @@
 import { Ticket, TicketInput, TicketOutput } from "../models/Ticket";
-import { Op } from "sequelize";
+import { UpdateOptions } from "sequelize";
 import { ServerError } from "../../lib/ServerError";
 
 export const create = async (payload: TicketInput): Promise<TicketOutput> => {
@@ -12,8 +12,6 @@ export const create = async (payload: TicketInput): Promise<TicketOutput> => {
 
    return ticket;
 };
-
-import { UpdateOptions } from "sequelize";
 
 //Might Need to Specify list and retrieve
 export const list = async (whereClause: any): Promise<TicketOutput[]> => {

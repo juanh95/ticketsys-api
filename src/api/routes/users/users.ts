@@ -70,11 +70,11 @@ export const retrieve: RequestHandler = async (req, res, next) => {
 };
 
 export const list: RequestHandler = async (req, res, next) => {
-   const usersList: User[] = await User.findAll();
+   const { email, department } = req.query;
 
-   return res
-      .status(200)
-      .json({ message: "Users fetched successfully", data: usersList });
+   const result = await userController.list(email, department);
+
+   return res.status(200).json({ data: result });
 };
 
 // export const deleteUser: RequestHandler = async (req, res, next) => {
