@@ -29,7 +29,7 @@ export const retrieve = async (payload: string): Promise<UserOutput | null> => {
  */
 export const list = async (...params: string[]): Promise<UserOutput[]> => {
    // Destructure the parameters array to retrieve email and department
-   const [email = null, department = null] = params;
+   const [all = null, email = null, department = null] = params;
 
    // Initialize an empty whereClause object for filtering
    const whereClause: any = {};
@@ -42,6 +42,10 @@ export const list = async (...params: string[]): Promise<UserOutput[]> => {
    // Check if department parameter is provided and add it to the whereClause
    if (department) {
       whereClause.department = department;
+   }
+
+   if (all) {
+      whereClause.all = all;
    }
 
    // Call the list method from userDal with the whereClause to retrieve the list of users

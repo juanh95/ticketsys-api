@@ -32,7 +32,7 @@ export const retrieve = async (payload: string): Promise<UserOutput | null> => {
    return result;
 };
 
-//TODO: implement search by email
+//TODO: implement search by email, search by ticket title searching by ticket title
 /**
  * Retrieve a list of users based on the provided 'whereClause' filter.
  * @param whereClause - An object specifying the filtering criteria.
@@ -40,7 +40,12 @@ export const retrieve = async (payload: string): Promise<UserOutput | null> => {
  */
 export const list = async (whereClause: any): Promise<UserOutput[]> => {
    // Use the User model to find all users based on the provided filter
-   let result = await User.findAll({
+   if (whereClause.all) {
+      const result = await User.findAll();
+      return result;
+   }
+
+   const result = await User.findAll({
       where: {
          department: {
             [Op.like]: `%${whereClause.department}%`,

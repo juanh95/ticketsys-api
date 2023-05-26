@@ -70,9 +70,9 @@ export const retrieve: RequestHandler = async (req, res, next) => {
 };
 
 export const list: RequestHandler = async (req, res, next) => {
-   const { email, department } = req.query;
+   const { all, email, department } = req.query;
 
-   const result = await userController.list(email, department);
+   const result = await userController.list(all, email, department);
 
    return res.status(200).json({ data: result });
 };
