@@ -1,19 +1,26 @@
-import { create, login, retrieve, list } from "./users";
+import { create, login, retrieve, list, update } from "./users";
 import passport from "passport";
 import { Router } from "express";
+import { tryCatch } from "../../../lib/tryCatch";
 
 const userRouter = Router();
 
-userRouter.get("/", list);
+userRouter.get("/", tryCatch(list));
 
-userRouter.post("/register", create);
+userRouter.post("/register", tryCatch(create));
 
-userRouter.post("/login", login);
+userRouter.post("/login", tryCatch(login));
 
 userRouter.get(
    "/myaccount",
    passport.authenticate("jwt", { session: false }),
-   retrieve
+   tryCatch(retrieve)
+);
+
+userRouter.put(
+   "/",
+   passport.authenticate("jwt", { session: false }),
+   tryCatch(update)
 );
 
 // userRouter.delete(

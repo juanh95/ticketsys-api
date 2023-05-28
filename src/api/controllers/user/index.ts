@@ -2,115 +2,67 @@ import { User } from "../../interfaces/index";
 import { CreateUserDTO } from "../../dto/user.dto";
 import * as mapper from "./mapper";
 import * as service from "../../services/userService";
+import { UserOutput } from "../../../database/models/User";
+import { ServerError } from "../../../lib/ServerError";
 
+/**
+ * Create a new user using the provided payload.
+ * @param payload - The data needed to create a new user.
+ * @returns The created user object.
+ */
 export const create = async (payload: CreateUserDTO): Promise<User> => {
-   return mapper.toUser(await service.create(payload));
+   // Call the service's create method to create a new user using the payload
+   const createdUser = await service.create(payload);
+
+   // Map the created user to the User model using the mapper's toUser method
+   return mapper.toUser(createdUser);
 };
 
-export const retrieve = async (payload: string): Promise<User | null> => {
-   return await service.retrieve(payload);
+/**
+ * Retrieve a user based on the provided payload.
+ * @param payload - The identifier or unique information to retrieve a user.
+ * @returns The retrieved user object.
+ * @throws ServerError if the user is not found.
+ */
+export const retrieve = async (payload: string): Promise<User> => {
+   // Call the service's retrieve method to retrieve the user using the payload
+   const result = await service.retrieve(payload);
+
+   // If the result is falsy, i.e., null or undefined, throw a ServerError with a 404 status code
+   if (!result) {
+      throw new ServerError("User was not found", 404);
+   }
+
+   // Map the retrieved user to the User model using the mapper's toUser method
+   return mapper.toUser(result);
 };
 
+/**
+ * Retrieve a list of users based on the provided parameters.
+ * @param params - The parameters used to filter and paginate the user list.
+ * @returns A list of users matching the specified criteria.
+ */
 export const list = async (...params: any[]): Promise<User[]> => {
+   // Call the service's list method to retrieve the list of users using the provided parameters
    const result = await service.list(...params);
 
+   // Map the result to the User model using the mapper's toUser method
    const formattedResult: User[] = result.map((user) => mapper.toUser(user));
 
+   // Return the formatted result
    return formattedResult;
 };
 
-// export const deleteUser: RequestHandler = async (req, res, next) => {
-//   try {
-//     const deletedUserCount: number = await User.destroy({
-//       where: { id: req.params.id },
-//     });
+/**
+ * Update a user with the specified ID using the provided fields.
+ * @param id - The ID of the user to update.
+ * @param fields - The fields to update in the user.
+ * @returns The updated user object.
+ */
+export const update = async (id: number, fields: any): Promise<User> => {
+   // Call the service's update method to update the user with the specified ID and fields
+   const updatedUser = await service.update(id, fields);
 
-//     if (deletedUserCount == 0) {
-//       return res.status(404).json({ message: "User could not be found" });
-//     }
-
-//     return res.status(200).json({ message: "User has been deleted" });
-//   } catch (error) {
-//     return res.status(500).json({ message: "User could not be deleted" });
-//   }
-// };
-
-// // TODO: Need to only get the data that we need to update
-// export const updateUser: RequestHandler = async (req, res, next) => {
-//   const userInfo = {
-//     id: req.body.id,
-//     firstname: req.body.firstname,
-//     lastname: req.body.lastname,
-//     phone: req.body.phone,
-//     email: req.body.email,
-//     department: req.body.department,
-//   };
-
-//   try {
-//     const arr = await User.update(
-//       {
-//         firstName: userInfo.firstname,
-//         lastName: userInfo.lastname,
-//         phone: userInfo.phone,
-//         email: userInfo.email,
-//         department: userInfo.department,
-//       },
-//       {
-//         where: { id: userInfo.id },
-//       }
-//     );
-
-//     return res.status(200).json({
-//       message: "User information was updated",
-//     });
-//   } catch (error) {
-//     return res.status(500).json({ message: "Unable to update user" });
-//   }
-// };
-
-// export const retrieveUser: RequestHandler = async (req, res, next) => {
-//   try {
-//     const user: User = req.user as User;
-
-//     if (user == null) {
-//       return res.status(404).json({ message: "User not found!" });
-//     }
-
-//     return res.status(200).json({ message: "User found!", data: user });
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({ message: "Unable to retrieve user!" });
-//   }
-// };
-
-// export const loginUser: RequestHandler = async (req, res, next) => {
-//   try {
-//     const userInfo = await User.findOne({ where: { email: req.body.email } });
-
-//     if (userInfo == null) {
-//       return res
-//         .status(404)
-//         .json({ message: "User with that email was not found" });
-//     }
-
-//     const match = await utils.validPassword(req.body.password, userInfo.pwd);
-
-//     if (match) {
-//       const jwt = utils.issueJWT(userInfo);
-
-//       return res.status(200).json({
-//         success: true,
-//         token: jwt.token,
-//         expiresIn: jwt.expires,
-//       });
-//     } else {
-//       return res
-//         .status(401)
-//         .json({ success: false, message: "Invalid credentials" });
-//     }
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .json({ message: "Unable to process user login", error: error });
-//   }
-// };
+   // Map the updated user to the User model using the mapper's toUser method
+   return mapper.toUser(updatedUser);
+};

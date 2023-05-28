@@ -51,3 +51,14 @@ export const list = async (...params: string[]): Promise<UserOutput[]> => {
    // Call the list method from userDal with the whereClause to retrieve the list of users
    return userDal.list(whereClause);
 };
+
+/**
+ * Updates a user record in the database.
+ *
+ * @param id - The ID of the user record to be updated.
+ * @param fields - An object containing the fields and their updated values for the user record.
+ * @returns A promise that resolves to a `UserOutput` object representing the updated user record.
+ */
+export const update = async (id: number, fields: any): Promise<UserOutput> => {
+   return userDal.update(id, fields);
+};

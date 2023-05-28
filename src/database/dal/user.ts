@@ -1,6 +1,7 @@
 import { User, UserInput, UserOutput } from "../models/User";
-import { Op } from "sequelize";
+import { Op, UpdateOptions } from "sequelize";
 import * as util from "../../crypto/utils";
+import { ServerError } from "../../lib/ServerError";
 
 /**
  * Create a new user based on the provided payload.
@@ -24,15 +25,19 @@ export const create = async (payload: UserInput): Promise<UserOutput> => {
  * @param payload - The email used to identify the user.
  * @returns A promise that resolves to a UserOutput object or null if not found.
  */
-export const retrieve = async (payload: string): Promise<UserOutput | null> => {
+export const retrieve = async (payload: string): Promise<UserOutput> => {
    // Use the User model to find a user with the specified email
    const result = await User.findOne({ where: { email: payload } });
+
+   if (result === null) {
+      throw new ServerError(`User with Email: ${payload} was not found`, 404);
+   }
 
    // Return the retrieved user or null if not found
    return result;
 };
 
-//TODO: implement search by email, search by ticket title searching by ticket title
+//TODO: implement search by email
 /**
  * Retrieve a list of users based on the provided 'whereClause' filter.
  * @param whereClause - An object specifying the filtering criteria.
@@ -45,6 +50,8 @@ export const list = async (whereClause: any): Promise<UserOutput[]> => {
       return result;
    }
 
+   // The pattern %${whereClause.department}% is used to match any value that contains the specified "department" value.
+   // The % sign acts as a wildcard, allowing for matching any characters before and after the "department" value.
    const result = await User.findAll({
       where: {
          department: {
@@ -55,4 +62,37 @@ export const list = async (whereClause: any): Promise<UserOutput[]> => {
 
    // Return the retrieved list of users
    return result;
+};
+
+/**
+ * Updates a user with the specified ID using the given fields.
+ *
+ * @param id - The ID of the user to update.
+ * @param fields - The fields to update for the user.
+ * @returns The updated user.
+ * @throws {ServerError} If no fields were updated or if the user could not be found.
+ */
+export const update = async (id: number, fields: any): Promise<UserOutput> => {
+   // Prepare the options for the update operation
+   const updateOptions: UpdateOptions = {
+      where: { id: id },
+   };
+
+   // Perform the update operation
+   const updates = await User.update(fields, updateOptions);
+
+   // Check if any fields were updated
+   if (updates[0] === 0) {
+      throw new ServerError("No fields were updated", 500);
+   }
+
+   // Retrieve the updated user
+   const updatedUser = await User.findByPk(id);
+
+   // Check if the user exists
+   if (!updatedUser) {
+      throw new ServerError("Unable to find user", 404);
+   }
+
+   return updatedUser;
 };
