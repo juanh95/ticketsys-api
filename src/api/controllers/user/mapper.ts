@@ -9,6 +9,8 @@ export const toUser = (user: UserOutput): User => {
       email: user.email,
       department: user.department,
       phone: user.phone,
+      pwd: user.pwd,
+      salt: user.salt,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       deletedAt: user.deletedAt,

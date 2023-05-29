@@ -135,3 +135,17 @@ export const update: RequestHandler = async (req, res, next) => {
 
    return res.status(200).json(updatedUser);
 };
+
+export const remove: RequestHandler = async (req, res, next) => {
+   const userId = req.params.id;
+
+   const deletedRows = await User.destroy({ where: { id: userId } });
+
+   if (deletedRows === 0) {
+      const err = new ServerError("User Not Found", 404);
+      err.name = "Unable to Delete";
+      throw err;
+   }
+
+   return res.status(200).json({ message: "User deleted successfully" });
+};

@@ -1,7 +1,8 @@
-import { create, login, retrieve, list, update } from "./users";
+import { create, login, retrieve, list, update, remove } from "./users";
 import passport from "passport";
 import { Router } from "express";
 import { tryCatch } from "../../../lib/tryCatch";
+import { checkGroupMembership } from "../../../lib/isMember";
 
 const userRouter = Router();
 
@@ -23,15 +24,11 @@ userRouter.put(
    tryCatch(update)
 );
 
-// userRouter.delete(
-//   "/:id",
-//   passport.authenticate("jwt", { session: false }),
-//   deleteUser
-// );
-// userRouter.put(
-//   "/:id",
-//   passport.authenticate("jwt", { session: false }),
-//   updateUser
-// );
+userRouter.delete(
+   "/:id",
+   passport.authenticate("jwt", { session: false }),
+   checkGroupMembership,
+   tryCatch(remove)
+);
 
 export default userRouter;

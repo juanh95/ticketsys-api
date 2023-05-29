@@ -10,10 +10,14 @@ import {
    Unique,
    BelongsToMany,
    HasMany,
+   ForeignKey,
+   BelongsTo,
 } from "sequelize-typescript";
 import { Ticket } from "./Ticket";
 import { Comment } from "./Comment";
+import { Group } from "./Group";
 import { UserTicket } from "./UserTicket";
+import { UserGroup } from "./UserGroup";
 
 interface UserAttributes {
    id: number;
@@ -74,7 +78,16 @@ export class User
    public affectedTickets?: Ticket[];
 
    @HasMany(() => Comment)
-   public comments!: Comment;
+   public comments!: Comment[];
+
+   @BelongsToMany(() => Group, () => UserGroup)
+   public groups?: Group[];
+
+   @ForeignKey(() => UserGroup)
+   public ownerId!: number;
+
+   @HasMany(() => Group, "ownerId")
+   public ownedGroups!: Group[];
 
    // timestamps!
    public readonly createdAt!: Date;
