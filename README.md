@@ -239,7 +239,7 @@ PUT /api/users/
 {
 	"email": "john.doe@service.com",
 	"department" : "IT - Cloud",
-  "phone" : "222-222-2222"
+    "phone" : "222-222-2222"
 }
 ```
 
@@ -267,7 +267,7 @@ PUT /api/comments/
 {
 	"ticketId": 1,
 	"userId" : 2,
-  "commentBody" : "Restarted server and collected logs"
+    "commentBody" : "Restarted server and collected logs"
 }
 ```
 
