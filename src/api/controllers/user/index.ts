@@ -24,13 +24,24 @@ export const create = async (payload: CreateUserDTO): Promise<User> => {
  * @returns The retrieved user object.
  * @throws ServerError if the user is not found.
  */
-export const retrieve = async (payload: string): Promise<User> => {
+export const retrieve = async (
+   payload: string,
+   check?: boolean
+): Promise<User | null> => {
    // Call the service's retrieve method to retrieve the user using the payload
    const result = await service.retrieve(payload);
 
-   // If the result is falsy, i.e., null or undefined, throw a ServerError with a 404 status code
-   if (!result) {
+   // If there was no user entry and we're not just checking, return server error
+   if (!result && !check) {
       throw new ServerError("User was not found", 404);
+   }
+
+   if (!result && check) {
+      return null;
+   }
+
+   if (!result) {
+      throw new ServerError("User retrival service failed", 500);
    }
 
    // Map the retrieved user to the User model using the mapper's toUser method

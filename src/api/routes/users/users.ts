@@ -21,7 +21,7 @@ export const create: RequestHandler = async (req, res, next) => {
    const payload: CreateUserDTO = req.body;
 
    // Check if a user with the same email already exists
-   const exists = await userController.retrieve(payload.email);
+   const exists = await userController.retrieve(payload.email, true);
 
    if (!exists) {
       // Create a new user if no existing user with the same email is found
@@ -50,6 +50,10 @@ export const create: RequestHandler = async (req, res, next) => {
 export const login: RequestHandler = async (req, res, next) => {
    // Retrieve the user based on the provided email
    const user = await userController.retrieve(req.body.email);
+
+   if (!user) {
+      throw new ServerError("User was not found", 404);
+   }
 
    // Validate the provided password against the stored user password
    const match = await utils.validPassword(req.body.pwd, user.pwd);

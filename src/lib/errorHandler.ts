@@ -21,7 +21,7 @@ export const errorHandler: ErrorRequestHandler = (
       // If so, send a response with the error message and status code
       return res.status(error.statusCode).send(error.message);
    }
-
+   console.log("Did not go through if");
    // If the error is not an instance of ServerError, send a generic error response with a 500 status code
    return res.status(500).send("Server Came Across an Error");
 };

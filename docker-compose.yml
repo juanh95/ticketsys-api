@@ -1,35 +1,26 @@
-version: "3.8"
-
+version: "3"
 services:
-   mysqldb:
-      platform: linux/x86_64
-      image: mysql:5.7
-      restart: unless-stopped
-      env_file: ./.env
-      environment:
-         - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-         - MYSQL_DATABASE=$MYSQLDB_DATABASE
-      ports:
-         - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
-      volumes:
-         - db:/var/lib/mysql
-
-   app:
-      depends_on:
-         - mysqldb
-      build: ./dist
-      restart: unless-stopped
-      env_file: ./.env
-      ports:
-         - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
-      environment:
-         - DB_HOST=ticketingsystem
-         - DB_USER=$MYSQLDB_USER
-         - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-         - DB_NAME=$MYSQLDB_DATABASE
-         - DB_PORT=$MYSQLDB_DOCKER_PORT
-      stdin_open: true
-      tty: true
-
-volumes:
    db:
+      image: mysql:8
+      environment:
+         - MYSQL_ROOT_PASSWORD=delta1071$$
+         - MYSQL_USER=myuser
+         - MYSQL_PASSWORD=delta1071$$
+         - MYSQL_DATABASE=ticketingsystem
+
+   node-app:
+      build:
+         context: .
+         dockerfile: Dockerfile
+      ports:
+         - "3000:3000"
+      environment:
+         - DB_NAME=ticketingsystem
+         - DB_USER=myuser
+         - DB_PASSWORD=delta1071$$
+         - DB_HOST=db
+         - DB_DIALECT=mysql
+         - DB_POOL_MAX=5
+         - DB_POOL_MIN=0
+         - DB_POOL_ACQUIRE=30000
+         - DB_POOL_IDLE=10000

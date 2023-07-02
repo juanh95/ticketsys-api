@@ -4,6 +4,7 @@ import * as mapper from "./mapper";
 import * as service from "../../services/ticketService";
 
 export const create = async (payload: CreateTicketDTO): Promise<Ticket> => {
+   console.log("Made it to the controller");
    return mapper.toTicket(await service.create(payload));
 };
 

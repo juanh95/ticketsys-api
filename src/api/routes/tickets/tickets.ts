@@ -8,6 +8,8 @@ export const create: RequestHandler = async (req, res, next) => {
    // The `CreateTicketDTO` type assertion is used to cast the request payload to the expected structure.
    const payload: CreateTicketDTO = req.body;
 
+   console.log("Made it to the route");
+
    // The `create` function on the `ticketController` object is called with the extracted payload as an argument.
    const result = await ticketController.create(payload);
 

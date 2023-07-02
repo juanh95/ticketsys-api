@@ -3,11 +3,16 @@ import { UpdateOptions } from "sequelize";
 import { ServerError } from "../../lib/ServerError";
 
 export const create = async (payload: TicketInput): Promise<TicketOutput> => {
+   console.log("Made to the DAL, next function calls create");
+   console.log(payload);
+
    const ticket = await Ticket.create(payload);
+   console.log("Past the create line");
 
    if (ticket === null) {
       const err = new ServerError("Unable to Create Record in MySQL", 500);
       err.name = "Record Error";
+      throw err;
    }
 
    return ticket;

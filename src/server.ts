@@ -18,7 +18,8 @@ dbInit();
 // };
 
 // middleware
-// app.use(cors(corOptions));
+
+// Enable Cross-Origin Resource Sharing (CORS) for handling requests from different origins
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,7 +32,12 @@ app.use(passport.initialize());
 app.use("/api", router);
 
 app.use("/home", (req, res) => {
-   res.send("Hello World");
+   return res.status(200).json("Hello World");
+});
+
+// Catch all unspecified routes
+app.all("*", (req, res) => {
+   return res.status(404).json("Page not found");
 });
 
 app.use(errorHandler);

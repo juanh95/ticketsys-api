@@ -2,6 +2,7 @@ import { TicketInput, TicketOutput } from "../../database/models/Ticket";
 import * as ticketDal from "../../database/dal/ticket";
 
 export const create = async (payload: TicketInput): Promise<TicketOutput> => {
+   console.log("Made it to the service");
    return ticketDal.create(payload);
 };
 

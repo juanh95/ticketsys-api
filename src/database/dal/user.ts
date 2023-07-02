@@ -25,13 +25,9 @@ export const create = async (payload: UserInput): Promise<UserOutput> => {
  * @param payload - The email used to identify the user.
  * @returns A promise that resolves to a UserOutput object or null if not found.
  */
-export const retrieve = async (payload: string): Promise<UserOutput> => {
+export const retrieve = async (payload: string): Promise<UserOutput | null> => {
    // Use the User model to find a user with the specified email
    const result = await User.findOne({ where: { email: payload } });
-
-   if (result === null) {
-      throw new ServerError(`User with Email: ${payload} was not found`, 404);
-   }
 
    // Return the retrieved user or null if not found
    return result;

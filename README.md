@@ -6,17 +6,17 @@ This is an API for a ticketing system that allows users to create, view, and man
 
 ## Technologies Used
 
-- Node.js
-- TypeScript
-- Express
-- MySQL
-- Sequelize
-- sequelize-typescript
-- bcrypt
-- crypto
-- jsonwebtoken
-- passport
-- passport-jwt
+-  Node.js
+-  TypeScript
+-  Express
+-  MySQL
+-  Sequelize
+-  sequelize-typescript
+-  bcrypt
+-  crypto
+-  jsonwebtoken
+-  passport
+-  passport-jwt
 
 ## Installation
 
@@ -26,6 +26,7 @@ To run this API on your local machine, you will need to have Node.js and MySQL i
 2. Open a terminal and navigate to the project directory.
 3. Run `npm install` to install the required dependencies.
 4. Set up your environment variables. Create a `dbConfig.ts` file in the src/config directory of the project and add the following code:
+
 ```
 var dbConfig = {
   HOST: "localhost",
@@ -45,78 +46,235 @@ var dbConfig = {
 export default dbConfig;
 
 ```
+
 5. Run `npm start` to start the server.
 6. The API will now be available at `http://localhost:8080`.
 
-## Features
+## API Routes
 
-The following features are available:
+#
 
-### `GET api/tickets`
+### Create A Ticket
 
-This endpoint is responsible for retrieving a list of tickets with the specified id, status, category, and priority properties from the server.
+**Endpoint**
 
-#### Query parameters
+```
+POST /api/tickets/
+```
 
-- id: A string representing the ticket ID.
-- status: A string representing the status of the ticket (e.g. "open", "closed", "pending").
-- category: A string representing the category of the ticket (e.g. "technical", "billing", "general").
-- priority: A string representing the priority of the ticket (e.g. "high", "medium", "low").
+**Request Body**
 
-### `GET /tickets/:id`
+-  `status` (required): The status of the ticket (string)
+-  `description` (required): The description or details of the ticket (string)
+-  `title` (required): The title or summary of the ticket (string)
+-  `category` (required): A cateogry for the ticket (string)
+-  `priority` (required): 1-Critical or 2-High or 3-Moderate or 4-Low (string)
+-  `affectedItem` (required): The specific item currently impacted (string)
+-  `phone` (required): The phone number associated with the ticket (string)
+-  `reportedId` (required): User ID of the one reporting the ticket (string)
+-  `affectedId` (required): User ID of the one affected (string)
+-  `assignedId` (optional): User ID of the one the ticket is assigned to (string)
 
-Get the details of a specific ticket.
+**Example Request**
 
-#### Path parameters
+```
+{
+	"status" : "New",
+	"description" : "Hypervisor is showing slow perfmance rates. A restart is needed to collect logs",
+	"title": "Hypervisor Restart",
+	"category": "Infrastructure",
+	"priority" : "2-High",
+	"affectedItem": "VMWare",
+	"phone": "111-111-1111",
+	"reportedId": 1,
+	"affectedId": 2,
+	"assignedId": 3
+}
+```
 
-- `id`: The ID of the ticket.
+**Returns: A Ticket JSON with the listed properties**
 
-### `POST /tickets`
+## List Tickets
 
-Create a new ticket.
+**Endpoint**
 
-#### Request body
+```
+GET /api/tickets/
+```
 
-- `title`: The title of the ticket.
-- `description`: The description of the ticket.
-- `priority`: The priority of the ticket. Possible values: `low`, `medium`, `high`.
-- `status`: The status of the ticket. Possible values: `open`, `closed`.
+**Path Parameters:**
 
-### `PUT /tickets/:id`
+-  id (optional): Specifies the unique identifier of the ticket.
 
-Update the status or priority of a ticket.
+**Query Parameters**
 
-#### Path parameters
+-  status (optional): Filters the tickets based on their status.
+-  priority (optional): Filters the tickets based on their priority.
+-  category (optional): Filters the tickets based on their category.
 
-- `id`: The ID of the ticket.
+> Note: Including the ID will pull up a single ticket, regarless of query parameters included. To list all tickets, use `.../tickets/?all=all`
 
-#### Request body
+**Example Request**
 
-- `priority` (optional): The new priority of the ticket. Possible values: `low`, `medium`, `high`.
-- `status` (optional): The new status of the ticket. Possible values: `open`, `closed`.
+Single Ticket:
 
-### `DELETE /tickets/:id`
+```
+GET .../api/tickets/3
+```
 
-Delete a ticket.
+Multiple Tickets:
 
-#### Path parameters
+```
+GET .../api/tickets/?status=open&priority=high&category=hardware
+```
 
-- `id`: The ID of the ticket.
+All Tickets:
 
-### `POST api/comments`
+```
+GET .../api/tickets/?all=all
+```
 
-This endpoint is responsible for creating and adding a comment to a ticket posted by a user
+## Update Ticket
 
-#### Request body
+**Endpoint**
 
-- `ticketId` (required): The ticket ID the comment is for (number)
-- `userId` (required): The user ID who posted the comment (number)
-- `commentBody` (required): The body of the comment (string)
+```
+POST /api/tickets/:id
+```
 
+**Path Parameters:**
+
+-  id (required): Specifies the unique identifier of the ticket.
+
+**Example Request**
+
+```
+#Route
+POST .../api/tickets/3
+
+# Request Body
+{
+  "status" : "Closed
+  "category" : "Personal Computer
+}
+```
+
+#
+
+## User Routes
+
+### Create User
+
+**Endpoint**
+
+```
+POST /api/users/register
+```
+
+**Request Body**
+
+-  `firstName` (required): The first name of the user (string)
+-  `lastName` (required): The last name of the user (string)
+-  `email` (required): User's email, will also be used as the username (string)
+-  `department` (required): The user's department (string)
+-  `pwd` (required): The user's password (string)
+-  `phone` (required): The user's contact phone (string)
+
+**Example Request**
+
+```
+{
+	"firstName" : "John",
+	"lastName" : "Doe",
+	"email": "john@service.com",
+	"department": "IT - Networking",
+	"pwd" : "password",
+	"phone": "111-111-1111",
+}
+```
+
+### Login
+
+**Endpoint**
+
+```
+POST /api/users/login
+```
+
+**Request Body**
+
+-  `email` (required): User's email, will also be used as the username (string)
+-  `pwd` (required): The user's password (string)
+
+**Example Request**
+
+```
+{
+	"email": "john@service.com",
+	"pwd" : "password",
+}
+```
+
+### Update User Info
+
+**Endpoint**
+
+```
+PUT /api/users/
+```
+
+> Note: At this time the user must be logged in to enter their information. Passport authenticates the user by token stored in the browser before allowing the update.
+
+**Request Body**
+
+-  `firstName` (optional): The first name of the user (string)
+-  `lastName` (optional): The last name of the user (string)
+-  `email` (optional): User's email, will also be used as the username (string)
+-  `department` (optional): The user's department (string)
+-  `phone` (optional): The user's contact phone (string)
+
+**Example Request**
+
+```
+{
+	"email": "john.doe@service.com",
+	"department" : "IT - Cloud",
+  "phone" : "222-222-2222"
+}
+```
+
+#
+
+## Comments
+
+### Create Comment
+
+**Endpoint**
+
+```
+PUT /api/comments/
+```
+
+**Request Body**
+
+-  `ticketId` (required): The associated ticket ID (string)
+-  `userId` (required): The user ID of the comment (string)
+-  `commentBody` (required): User's email, will also be used as the username (string)
+
+**Example Request**
+
+```
+{
+	"ticketId": 1,
+	"userId" : 2,
+  "commentBody" : "Restarted server and collected logs"
+}
+```
 
 ## Error Handling
 
 This API uses standard HTTP status codes to indicate success or failure of requests. In case of an error, a JSON response with the following format will be returned:
+
 ```
 {
   "error": {
@@ -138,4 +296,4 @@ Contributions are welcome! If you find a bug or have a feature request, please o
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-# 
+#
