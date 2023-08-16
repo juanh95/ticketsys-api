@@ -18,6 +18,10 @@ This is an API for a ticketing system that allows users to create, view, and man
 -  passport
 -  passport-jwt
 
+## Server Data Flow
+
+![alt text](https://github.com/juanh95/ticketsys-api/blob/main/db_pic.drawio.png)
+
 ## Installation
 
 To run this API on your local machine, you will need to have Node.js and MySQL installed. Once you have these installed, follow these steps:
