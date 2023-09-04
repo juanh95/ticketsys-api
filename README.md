@@ -103,7 +103,7 @@ POST /api/tickets/
 **Endpoint**
 
 ```
-GET /api/tickets/
+GET /api/tickets/(:id)
 ```
 
 **Path Parameters:**

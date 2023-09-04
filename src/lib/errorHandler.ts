@@ -7,8 +7,6 @@ import { ServerError } from "./ServerError";
    a generic error response with a 500 status code. This middleware improves error handling in the application.
 */
 
-// Error is also picking up cases where the correct route is not found
-
 // Define an error handling middleware named errorHandler
 export const errorHandler: ErrorRequestHandler = (
    error: ServerError,
@@ -16,12 +14,11 @@ export const errorHandler: ErrorRequestHandler = (
    res
 ) => {
    // Check if the error is an instance of ServerError
-   console.log("Inside the error handler");
    if (error instanceof ServerError) {
       // If so, send a response with the error message and status code
       return res.status(error.statusCode).send(error.message);
    }
-   console.log("Did not go through if");
+
    // If the error is not an instance of ServerError, send a generic error response with a 500 status code
    return res.status(500).send("Server Came Across an Error");
 };
