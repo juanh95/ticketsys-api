@@ -2,5 +2,6 @@
 /src/config/dbConfig.ts
 /src/crypto/id_rsa_priv.pem
 /src/crypto/id_rsa_pub.pem
+/tests/id_rsa_priv.pem
 /node_modules
 dist
