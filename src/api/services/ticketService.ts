@@ -2,12 +2,25 @@ import { TicketInput, TicketOutput } from "../../database/models/Ticket";
 import * as ticketDal from "../../database/dal/ticket";
 
 export const create = async (payload: TicketInput): Promise<TicketOutput> => {
-   console.log("Made it to the service");
    return ticketDal.create(payload);
 };
 
-export const list = async (...params: any[]): Promise<TicketOutput[]> => {
-   const [id = null, status = null, category = null, priority = null] = params;
+export const list = async (
+   ...params: any[]
+): Promise<{
+   tickets: TicketOutput[];
+   currentPage?: number;
+   totalPages?: number;
+   totalTickets?: number;
+}> => {
+   const [
+      id = null,
+      status = null,
+      category = null,
+      priority = null,
+      page = null,
+      limit = null,
+   ] = params;
 
    const whereClause: any = {};
 
@@ -28,7 +41,7 @@ export const list = async (...params: any[]): Promise<TicketOutput[]> => {
       }
    }
 
-   return ticketDal.list(whereClause);
+   return ticketDal.list(whereClause, page, limit);
 };
 
 export const retrieve = async (id: number): Promise<TicketOutput> => {

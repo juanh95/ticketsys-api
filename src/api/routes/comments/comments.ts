@@ -1,21 +1,42 @@
 import { RequestHandler } from "express";
 import { CreateCommentDTO } from "../../dto/comment.dto";
 import * as commentController from "../../controllers/comment/index";
+import { User } from "../../interfaces";
 
-// The following function is called `create` and it is of type RequestHandler.
-// It takes in the HTTP request object, response object, and next middleware function as arguments.
+/**
+ * Creates a new comment.
+ *
+ * @param req - The Express request object.
+ * @param res - The Express response object.
+ * @param next - The next middleware function.
+ * @returns A response indicating the success or failure of the comment creation.
+ */
 export const create: RequestHandler = async (req, res, next) => {
+   // Try to create the comment.
    try {
-      // The `CreateCommentDTO` type assertion is used to cast the request payload to the expected structure.
+      // Get the user data from the request.
+      const userData: User = req.user as User;
+
+      if (!req.body.commentBody) {
+         return res
+            .status(400)
+            .json({ msg: "Comment body is missing or empty" });
+      }
+
+      // Add the user's ID to the request body, so that the comment can be associated with the correct user.
+      req.body.userId = userData.id;
+
+      // Create a new `CreateCommentDTO` object from the request body.
       const payload: CreateCommentDTO = req.body;
 
-      // The `create` function on the `commentController` object is called with the extracted payload as an argument.
+      // Call the commentController.create() function to create the comment.
       const result = await commentController.create(payload);
 
-      // A success response with a status code of 200 and the created comment object is sent to the client.
-      res.status(200).send(result);
+      // Send the result back to the client with a status code of 200, indicating that the comment was created successfully.
+      return res.status(200).send(result);
+
+      // Catch any errors that occur and send a generic error message back to the client with a status code of 500.
    } catch (error) {
-      // If an error occurs during creation of the comment, a failure response with a status code of 500 and a JSON error message is sent to the client.
-      res.status(500).json({ msg: "Unable to add comment" });
+      return res.status(500).json({ msg: "Unable to add comment" });
    }
 };

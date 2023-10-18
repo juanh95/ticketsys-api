@@ -4,7 +4,7 @@
    "description": "",
    "main": "src/server.ts",
    "scripts": {
-      "test": "NODE_ENV=test mocha tests/user.js --timeout 10000",
+      "test": "NODE_ENV=test NODE_ENV_M=True mocha tests/tests.js --timeout 10000",
       "build": "npx tsc",
       "start": "tsc && NODE_ENV=test node dist/server.js",
       "dev": "tsc -w & NODE_ENV=prod node dist/server.js"

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>API Routes Documentation</title>
+      <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+         }
+         h2,
+         h3,
+         code,
+         pre {
+            margin-top: 10px;
+         }
+         code,
+         pre {
+            background-color: #f4f4f4;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+         }
+      </style>
+   </head>
+   <body>
+      <h1>API Routes Documentation</h1>
+
+      <h2>Create A Ticket</h2>
+
+      <h3>Endpoint</h3>
+
+      <pre>
+POST /api/tickets/
+    </pre
+      >
+
+      <h3>Request Body</h3>
+
+      <ul>
+         <li>
+            <code>status</code> (required): The status of the ticket (string)
+         </li>
+         <li>
+            <code>description</code> (required): The description or details of
+            the ticket (string)
+         </li>
+         <!-- Add the rest of the list items -->
+      </ul>
+
+      <h3>Example Request</h3>
+
+      <pre>
+{
+    "status" : "New",
+    "description" : "Hypervisor is showing slow perfmance rates. A restart is needed to collect logs",
+    "title": "Hypervisor Restart",
+    "category": "Infrastructure",
+    "priority" : "2-High",
+    "affectedItem": "VMWare",
+    "phone": "111-111-1111",
+    "reportedId": 1,
+    "affectedId": 2,
+    "assignedId": 3
+}
+    </pre
+      >
+
+      <h3>Returns</h3>
+
+      <p>A Ticket JSON with the listed properties</p>
+
+      <!-- Add List Tickets, Update Ticket, User Routes, Comments sections following the same pattern -->
+
+      <h2>List Tickets</h2>
+
+      <!-- Add List Tickets content here -->
+
+      <h2>Update Ticket</h2>
+
+      <!-- Add Update Ticket content here -->
+
+      <h2>User Routes</h2>
+
+      <!-- Add User Routes content here -->
+
+      <h2>Comments</h2>
+
+      <!-- Add Comments content here -->
+
+      <h2>Error Handling</h2>
+
+      <pre>
+{
+  "error": {
+    "code": &lt;HTTP status code&gt;,
+    "message": "&lt;error message&gt;"
+  }
+}
+    </pre
+      >
+   </body>
+</html>

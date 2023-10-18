@@ -106,11 +106,8 @@ export const retrieve: RequestHandler = async (req, res, next) => {
  * @returns A JSON response with the list of users.
  */
 export const list: RequestHandler = async (req, res, next) => {
-   // Extract the query parameters from the request object
-   const { all, email, department } = req.query;
-
    // Call the userController's list method to retrieve the list of users
-   const result = await userController.list(all, email, department);
+   const result = await userController.list(req.query);
 
    // Send a JSON response with the list of users
    return res.status(200).json({ data: result });

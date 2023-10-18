@@ -1,14 +1,24 @@
 import { RequestHandler } from "express";
 import { CreateTicketDTO } from "../../dto/ticket.dto";
 import * as ticketController from "../../controllers/ticket/index";
+import { validTicketInputPayload } from "../../../lib/validator";
 
 // The following function is called `create` and it is of type RequestHandler.
 // It takes in the HTTP request object, response object, and next middleware function as arguments.
 export const create: RequestHandler = async (req, res, next) => {
+   // Get the missing fields from the request body.
+   const missingFields = validTicketInputPayload(req);
+
+   // If there are any missing fields, return a bad request error.
+   if (Object.keys(missingFields).length > 0) {
+      const errorMessage = `The following fields are missing: ${Object.keys(
+         missingFields
+      ).join(", ")}`;
+      return res.status(400).json({ MissingFieldsError: errorMessage });
+   }
+
    // The `CreateTicketDTO` type assertion is used to cast the request payload to the expected structure.
    const payload: CreateTicketDTO = req.body;
-
-   console.log("Made it to the route");
 
    // The `create` function on the `ticketController` object is called with the extracted payload as an argument.
    const result = await ticketController.create(payload);
@@ -26,8 +36,18 @@ export const list: RequestHandler = async (req, res, next) => {
    // The `id`, `status`, `category`, and `priority` properties are extracted from the request's query string.
    const { id, status, category, priority } = req.query;
 
+   const page = req.query.page || 1;
+   const limit = req.query.limit || 20;
+
    // The `listReported` function on the `ticketController` object is called with the extracted properties as arguments.
-   const result = await ticketController.list(id, status, category, priority);
+   const result = await ticketController.list(
+      id,
+      status,
+      category,
+      priority,
+      page,
+      limit
+   );
 
    // A success response with a status code of 200 and a JSON object containing the retrieved data is sent to the client.
    return res.status(200).json({ data: result });

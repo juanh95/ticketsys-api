@@ -39,9 +39,6 @@ const strategy = new JwtStrategy(options, async (payload, done) => {
    const now = Math.floor(Date.now() / 1000);
 
    // Check if decoded data does not have exp value or if it has expired, then call done function with false argument.
-   console.log("The now value is: " + now);
-   console.log("The exp value is: " + Math.floor(payload.exp / 1000));
-
    if (decodedData?.exp && now > Math.floor(decodedData.exp / 1000)) {
       return done(null, false);
    }
