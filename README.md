@@ -188,7 +188,7 @@ PUT /api/users/
 
 ## Ticket Routes
 
-> Note: This route requires authentication by including the bearer token in the `Authorization` header in the request.
+> Note: All the ticket routes require authentication by including the bearer token in the `Authorization` header in the request.
 
 ### Create A Ticket
 
