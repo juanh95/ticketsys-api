@@ -19,6 +19,8 @@ passport.use(strategy);
 app.use(passport.initialize());
 
 if (process.env.NODE_ENV_M != "True") {
+   console.log("Starting connection process...");
+
    dbInit()
       .then(() => {
          console.log("Connected and synced to database...");

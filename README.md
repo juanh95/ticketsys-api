@@ -56,7 +56,141 @@ export default dbConfig;
 
 ## API Routes
 
+> Note: Some routes will require authentication via JWT token
+
 #
+
+## User Routes
+
+### Create User
+
+**Endpoint**
+
+```
+POST /api/users/register
+```
+
+**Request Body**
+
+-  `firstName` (required): The first name of the user (string)
+-  `lastName` (required): The last name of the user (string)
+-  `email` (required): User's email, will also be used as the username (string)
+-  `department` (required): The user's department (string)
+-  `pwd` (required): The user's password (string)
+-  `phone` (required): The user's contact phone (string)
+
+**Example Request**
+
+```
+{
+	"firstName" : "John",
+	"lastName" : "Doe",
+	"email": "john@service.com",
+	"department": "IT - Networking",
+	"pwd" : "password",
+	"phone": "111-111-1111",
+}
+```
+
+**Returns**
+
+A JSON string with `user` and `tokenInfo` values.
+
+The user key contains another JSON string as a value with the information the user provided as well as an ID and `createdAt`, `updatedAt` date values.
+
+The `tokenInfo` value likewise contains a JSON string with `token` and `expires` (in milliseconds) keys. Tokens are set to expire 2 hours after generation.
+
+**Example Return**
+
+```
+{
+	"user": {
+		"id": 001,
+		"firstName": "James",
+		"lastName": "Bond",
+		"email": "JBond@ticket.com",
+		"department": "IT",
+		"phone": "123-456-7890",
+		"pwd": "hashed-password",
+		"salt": "hashed-salt",
+		"createdAt": "2023-10-24T14:47:20.517Z",
+		"updatedAt": "2023-10-24T14:47:20.517Z"
+	},
+	"tokenInfo": {
+		"token": "Bearer XYZ",
+		"expires": 7200000
+	}
+}
+```
+
+### Login
+
+**Endpoint**
+
+```
+POST /api/users/login
+```
+
+**Request Body**
+
+-  `email` (required): User's email, will also be used as the username (string)
+-  `pwd` (required): The user's password (string)
+
+**Example Request**
+
+```
+{
+	"email": "john@service.com",
+	"pwd" : "password",
+}
+```
+
+**Returns**
+
+A JSON string with `success`, `token`, `expiresIn`, and `user` keys.
+
+```
+{
+	"success": true,
+	"token": "Bearer XYZ,
+	"expiresIn": 7200000,
+	"user": "James"
+}
+```
+
+### Update User Info
+
+**Endpoint**
+
+```
+PUT /api/users/
+```
+
+> Note: At this time the user must be logged in to enter their information. Send the JWT token by including the bearer token in the `Authorization` header in the request. For this request, you only need to include the fields you want to update.
+
+**Request Body**
+
+-  `firstName` (optional): The first name of the user (string)
+-  `lastName` (optional): The last name of the user (string)
+-  `email` (optional): User's email, will also be used as the username (string)
+-  `department` (optional): The user's department (string)
+-  `phone` (optional): The user's contact phone (string)
+
+**Example Request**
+
+```
+{
+	"email": "john.doe@service.com",
+	"department" : "IT - Cloud",
+    "phone" : "222-222-2222"
+}
+```
+
+#
+
+## Ticket Routes
+
+> Note: This route requires authentication by including the bearer token in the `Authorization` header in the request.
 
 ### Create A Ticket
 
@@ -96,14 +230,16 @@ POST /api/tickets/
 }
 ```
 
-**Returns: A Ticket JSON with the listed properties**
+**Returns**
+
+A Ticket JSON string with the listed properties as well as `id`, `createdAt`, and `updatedAt` keys.
 
 ## List Tickets
 
 **Endpoint**
 
 ```
-GET /api/tickets/
+GET /api/tickets/:id
 ```
 
 **Path Parameters:**
@@ -116,27 +252,120 @@ GET /api/tickets/
 -  priority (optional): Filters the tickets based on their priority.
 -  category (optional): Filters the tickets based on their category.
 
-> Note: Including the ID will pull up a single ticket, regarless of query parameters included. To list all tickets, use `.../tickets/?all=all`
+> Note: Including the ID will pull up a single ticket, regarless of query parameters included.
 
-**Example Request**
+**Example Requests**
 
-Single Ticket:
+Single Ticket (Also Returns Comments Made For that Ticket):
 
 ```
 GET .../api/tickets/3
 ```
 
+**Returns**
+
+A JSON string with all ticket fields, including `comments` an array of JSON strings containing all comments and and their metadata for that ticket.
+
+**Example Return**
+
+```
+{
+	"id": 41,
+	"status": "Closed",
+	"description": "I need a charger",
+	"reportedId": 2,
+	"affectedId": 2,
+	"assignedId": 2,
+	"createdAt": "2023-07-02T03:55:21.000Z",
+	"updatedAt": "2023-07-02T03:55:21.000Z",
+	"priority": "3",
+	"category": "Software",
+	"affectedItem": "Personal Computer",
+	"title": "Hardware Request",
+	"phone": "956-123-1231",
+	"comments": [
+		{
+			"id": 3,
+			"ticketId": 41,
+			"userId": 2,
+			"commentBody": "This is a comment",
+			"createdAt": "2023-10-11T16:00:30.000Z",
+			"updatedAt": "2023-10-11T16:00:30.000Z"
+		},
+		{
+			"id": 4,
+			"ticketId": 41,
+			"userId": 2,
+			"commentBody": "This is another comment",
+			"createdAt": "2023-10-11T16:18:50.000Z",
+			"updatedAt": "2023-10-11T16:18:50.000Z"
+		},
+		{
+			"id": 5,
+			"ticketId": 41,
+			"userId": 2,
+			"commentBody": "Thi is another comment",
+			"createdAt": "2023-10-11T16:19:00.000Z",
+			"updatedAt": "2023-10-11T16:19:00.000Z"
+		}
+	]
+}
+```
+
 Multiple Tickets:
 
 ```
-GET .../api/tickets/?status=open&priority=high&category=hardware
+GET .../api/tickets/?category=hardware&page=2
+```
+
+**Returns**
+
+A JSON string with `data`, `currentPage`, `totalPages`, and `totalTickets` keys. The `data` key contains an array of `Ticket` JSON objects that include the ticket fields. Results will be paginated 20 results per page, so the page will need to be indicated if not on the first page.
+
+**Example Return**
+
+```
+{
+	"data": {
+		tickets: [
+			{
+				"id" : 48
+				"status" : "Open"
+				"category" : "Hardware"
+				.
+				.
+				.
+				"phone" : "123-456-7890"
+			},
+			{
+				"id" : 49
+				"status" : "Open"
+				"category" : "Hardware"
+				.
+				.
+				.
+				"phone" : "123-456-7890"
+			}
+			.
+			.
+			.
+		]
+	},
+	"currentPage": "2",
+	"totalPages": 4,
+	"totalTickets": 79
+}
 ```
 
 All Tickets:
 
 ```
-GET .../api/tickets/?all=all
+GET .../api/tickets/
 ```
+
+**Returns: Same as above**
+
+**Example Returns: Same as above**
 
 ## Update Ticket
 
@@ -150,6 +379,8 @@ POST /api/tickets/:id
 
 -  id (required): Specifies the unique identifier of the ticket.
 
+Include the fields you want to change in the request body.
+
 **Example Request**
 
 ```
@@ -158,98 +389,14 @@ POST .../api/tickets/3
 
 # Request Body
 {
-  "status" : "Closed
-  "category" : "Personal Computer
+  "status" : "Closed"
+  "category" : "Personal Computer"
 }
 ```
 
 #
 
-## User Routes
-
-### Create User
-
-**Endpoint**
-
-```
-POST /api/users/register
-```
-
-**Request Body**
-
--  `firstName` (required): The first name of the user (string)
--  `lastName` (required): The last name of the user (string)
--  `email` (required): User's email, will also be used as the username (string)
--  `department` (required): The user's department (string)
--  `pwd` (required): The user's password (string)
--  `phone` (required): The user's contact phone (string)
-
-**Example Request**
-
-```
-{
-	"firstName" : "John",
-	"lastName" : "Doe",
-	"email": "john@service.com",
-	"department": "IT - Networking",
-	"pwd" : "password",
-	"phone": "111-111-1111",
-}
-```
-
-### Login
-
-**Endpoint**
-
-```
-POST /api/users/login
-```
-
-**Request Body**
-
--  `email` (required): User's email, will also be used as the username (string)
--  `pwd` (required): The user's password (string)
-
-**Example Request**
-
-```
-{
-	"email": "john@service.com",
-	"pwd" : "password",
-}
-```
-
-### Update User Info
-
-**Endpoint**
-
-```
-PUT /api/users/
-```
-
-> Note: At this time the user must be logged in to enter their information. Passport authenticates the user by token stored in the browser before allowing the update.
-
-**Request Body**
-
--  `firstName` (optional): The first name of the user (string)
--  `lastName` (optional): The last name of the user (string)
--  `email` (optional): User's email, will also be used as the username (string)
--  `department` (optional): The user's department (string)
--  `phone` (optional): The user's contact phone (string)
-
-**Example Request**
-
-```
-{
-	"email": "john.doe@service.com",
-	"department" : "IT - Cloud",
-    "phone" : "222-222-2222"
-}
-```
-
-#
-
-## Comments
+## Comment Routes
 
 ### Create Comment
 
@@ -262,7 +409,6 @@ PUT /api/comments/
 **Request Body**
 
 -  `ticketId` (required): The associated ticket ID (string)
--  `userId` (required): The user ID of the comment (string)
 -  `commentBody` (required): User's email, will also be used as the username (string)
 
 **Example Request**
@@ -270,8 +416,23 @@ PUT /api/comments/
 ```
 {
 	"ticketId": 1,
-	"userId" : 2,
     "commentBody" : "Restarted server and collected logs"
+}
+```
+
+**Returns**
+
+A JSON string containing the comment body as well as `id`, `userId`, and `createdAt` date.
+
+**Example Return**
+
+```
+{
+	"id": 41,
+	"ticketId": 41,
+	"userId": 12,
+	"commentBody": "Some comment",
+	"createdAt": "2023-10-18T14:02:53.385Z"
 }
 ```
 
