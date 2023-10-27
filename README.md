@@ -1,5 +1,3 @@
-Note: Documentation Still In Progress...
-
 # Ticketing System API
 
 This is an API for a ticketing system that allows users to create, view, and manage tickets.
